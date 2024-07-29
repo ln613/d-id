@@ -210,7 +210,7 @@ function playIdleVideo() {
   videoElement.classList.toggle("animated")
 
   videoElement.srcObject = undefined;
-  videoElement.src = 'emma_idle.mp4';
+  videoElement.src = "https://agents-results.d-id.com/google-oauth2|115115236146534848384/agt_JdGCtniN/idle_1721805182857.mp4"; // 'emma_idle.mp4';
   videoElement.loop = true;
 
   // Remove Animation Class after it's completed
@@ -284,7 +284,7 @@ connectButton.onclick = async () => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      source_url: 'https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg'
+      "source_url": "https://create-images-results.d-id.com/google-oauth2|115115236146534848384/upl_HJNFFUCs2NaEGsfiZ1ecN/image.jpeg", // "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg"
     }),
   });
 
@@ -464,16 +464,17 @@ async function agentsAPIworkflow() {
           "type": "microsoft",
           "voice_id": "en-US-JennyMultilingualV2Neural"
         },
-        "thumbnail": "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg",
-        "source_url": "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg"
+        "thumbnail": "https://create-images-results.d-id.com/google-oauth2|115115236146534848384/upl_HJNFFUCs2NaEGsfiZ1ecN/thumbnail.jpeg", // "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg",
+        "idle_video": "https://agents-results.d-id.com/google-oauth2|115115236146534848384/agt_JdGCtniN/idle_1721805182857.mp4",
+        "source_url": "https://create-images-results.d-id.com/google-oauth2|115115236146534848384/upl_HJNFFUCs2NaEGsfiZ1ecN/image.jpeg", // "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg"
       },
       "llm": {
         "type": "openai",
         "provider": "openai",
         "model": "gpt-3.5-turbo-1106",
-        "instructions": "Your name is Emma, an AI designed to assist with information about Prompt Engineering and RAG"
+        "instructions": "Your name is Teacher, an AI designed to assist with information about Prompt Engineering and RAG"
       },
-      "preview_name": "Emma"
+      "preview_name": "Teacher"
     }
 
   )
@@ -516,5 +517,5 @@ agentsButton.onclick = async () => {
 }
 
 // Paste Your Created Agent and Chat IDs Here:
-agentId = ""
-chatId = ""
+agentId = "agt_JdGCtniN"
+chatId = "cht_8y0P6bLIxq1TfE-eZcqFS"
