@@ -522,4 +522,4 @@ agentsButton.onclick = async () => {
 
 // Paste Your Created Agent and Chat IDs Here:
 agentId = "agt_JdGCtniN"
-chatId = "cht_cTqaWhGssSlLvMRcg3ZDu"
+chatId = "cht_Z_pWInxNKerieAZ376ZWs"
