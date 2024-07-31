@@ -34,7 +34,7 @@ const textArea = document.getElementById("textArea");
 // Play the idle video when the page is loaded
 window.onload = (event) => {
 
-  playIdleVideo()
+  //playIdleVideo()
 
   if (agentId == "" || agentId == undefined) {
     console.log("Empty 'agentID' and 'chatID' variables\n\n1. Click on the 'Create new Agent with Knowledge' button\n2. Open the Console and wait for the process to complete\n3. Press on the 'Connect' button\n4. Type and send a message to the chat\nNOTE: You can store the created 'agentID' and 'chatId' variables at the bottom of the JS file for future chats")
@@ -375,7 +375,7 @@ destroyButton.onclick = async () => {
 };
 
 // Agents API Workflow
-async function agentsAPIworkflow() {
+async function agentsAPIworkflow(isNewAgent) {
   agentIdLabel.innerHTML = `<span style='color:orange'>Processing...<style='color:orange'>`
   chatIdLabel.innerHTML = `<span style='color:orange'>Processing...<style='color:orange'>`
   axios.defaults.baseURL = `${DID_API.url}`;
@@ -411,6 +411,7 @@ async function agentsAPIworkflow() {
     }
   }
 
+  if (isNewAgent) {
   // Knowledge Overview - Step 1: Create a new Knowledge Base
   // https://docs.d-id.com/reference/knowledge-overview#%EF%B8%8F-step-1-create-a-new-knowledge-base
   const createKnowledge = await axios.post('/knowledge',
@@ -481,6 +482,7 @@ async function agentsAPIworkflow() {
   console.log("Create Agent: ", createAgent.data)
   let agentId = createAgent.data.id
   console.log("Agent ID: " + agentId)
+  }
 
   // Agents Overview - Step 2: Create a new Chat session with the Agent
   // https://docs.d-id.com/reference/agents-overview#%EF%B8%8F-step-2-create-a-new-chat-session-with-the-agent
@@ -503,10 +505,11 @@ async function agentsAPIworkflow() {
 const agentsButton = document.getElementById("agents-button")
 agentsButton.onclick = async () => {
   try{
-    const agentsIds = {} = await agentsAPIworkflow()
+    const agentsIds = {} = await agentsAPIworkflow(false)
     console.log(agentsIds)
     agentId = agentsIds.agentId
     chatId = agentsIds.chatId
+
     return
   }
   catch(err){
@@ -516,6 +519,7 @@ agentsButton.onclick = async () => {
   }
 }
 
+
 // Paste Your Created Agent and Chat IDs Here:
 agentId = "agt_JdGCtniN"
-chatId = "cht_8y0P6bLIxq1TfE-eZcqFS"
+chatId = "cht_cTqaWhGssSlLvMRcg3ZDu"

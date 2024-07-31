@@ -159,7 +159,6 @@ textarea {
 video {
   /* display: block; */
   border-radius: 50%;
-  background-image: url("emma_idle.png");
   background-position: top;
   /* position: absolute; */
   background-size: contain;
