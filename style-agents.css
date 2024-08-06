@@ -73,9 +73,9 @@ body * {
 
 #content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: space-evenly;
-  margin-top: 50px;
+  /* margin-top: 50px; */
 }
 
 #buttons {
@@ -158,7 +158,7 @@ textarea {
 
 video {
   /* display: block; */
-  border-radius: 50%;
+  /* border-radius: 50%; */
   background-position: top;
   /* position: absolute; */
   background-size: contain;

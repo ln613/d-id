@@ -1,13 +1,9 @@
-'use strict';
-// const fetchJsonFile = await fetch("./api.json")
-const DID_API = // await fetchJsonFile.json()
-{
+const DID_API = {
   "key": "bG42MTNAaG90bWFpbC5jb20:5a8ObzwG1FVRztJgOZ0XY",
   "url": "https://api.d-id.com",
   "service": "talks"
 }
-
-if (DID_API.key == '🤫') alert('Please put your api key inside ./api.json and restart..');
+const ABLY_API_KEY = "dUneIQ.aARKiA:9HSmVmMZm4hOh7k97hOCJJQ2vJee3Ovg-GVPYnEX_Z0";
 
 const RTCPeerConnection = (
   window.RTCPeerConnection ||
@@ -24,6 +20,8 @@ let videoIsPlaying;
 let lastBytesReceived;
 let agentId;
 let chatId;
+let ably;
+let channel;
 
 const videoElement = document.getElementById('video-element');
 videoElement.setAttribute('playsinline', '');
@@ -262,20 +260,9 @@ const connect = async () => {
   });
 };
 
-const startButton = document.getElementById('start-button');
-startButton.onclick = async () => {
+const sendToChat = async (msg) => {
   // connectionState not supported in firefox
   if (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') {
-
-    // Pasting the user's message to the Chat History element
-    document.getElementById("msgHistory").innerHTML += `<span style='opacity:0.5'><u>User:</u> ${textArea.value}</span><br>`
-
-    // Storing the Text Area value
-    let txtAreaValue = document.getElementById("textArea").value
-
-    // Clearing the text-box element
-    document.getElementById("textArea").value = ""
-
 
     // Agents Overview - Step 3: Send a Message to a Chat session - Send a message to a Chat
     const playResponse = await fetchWithRetries(`${DID_API.url}/agents/${agentId}/chat/${chatId}`, {
@@ -290,7 +277,7 @@ startButton.onclick = async () => {
         "messages": [
           {
             "role": "user",
-            "content": txtAreaValue,
+            "content": msg,
             "created_at": new Date().toString()
           }
         ]
@@ -299,9 +286,7 @@ startButton.onclick = async () => {
     const playResponseData = await playResponse.json();
     if (playResponse.status === 200 && playResponseData.chatMode === 'TextOnly') {
       console.log('User is out of credit, API only return text messages');
-      document.getElementById(
-        'msgHistory'
-      ).innerHTML += `<span style='opacity:0.5'> ${playResponseData.result}</span><br>`;
+      console.log(playResponseData.result);
     }
   }
 };
@@ -469,7 +454,19 @@ const createAgent = async () => {
 agentId = "agt_JdGCtniN"
 chatId = "cht_EgYOoYPqt4Ovja92RJXQ7"
 
+const setupAbly = async () => {
+  ably = new Ably.Realtime(ABLY_API_KEY);
+  channel = ably.channels.get("did");
+  await channel.attach();
+  channel.subscribe("first", (message) => {
+      console.log("Message received: " + message.data)
+  });
+  document.getElementById('btnSend').addEventListener('click', () => {
+    channel.publish('first', 'abc');
+  })
+}
+
 window.onload = () => {
-  console.log('load');
   connect();
+  setupAbly();
 }
