@@ -50,7 +50,6 @@ async function createPeerConnection(offer, iceServers) {
     console.log("datachannel open");
   };
 
-  let decodedMsg;
   // Agent Text Responses - Decoding the responses, pasting to the HTML element
   dc.onmessage = (event) => {
     let msg = event.data
@@ -58,15 +57,7 @@ async function createPeerConnection(offer, iceServers) {
     if (msg.includes(msgType)) {
       msg = decodeURIComponent(msg.replace(msgType, ""))
       console.log(msg)
-      decodedMsg = msg
-      return decodedMsg
-    }
-    if (msg.includes("stream/started")) {
-      console.log(msg)
-      document.getElementById("msgHistory").innerHTML += `<span>${decodedMsg}</span><br><br>`
-    }
-    else {
-      console.log(msg)
+      channel.publish('first', msg)
     }
   };
 
@@ -458,11 +449,8 @@ const setupAbly = async () => {
   ably = new Ably.Realtime(ABLY_API_KEY);
   channel = ably.channels.get("did");
   await channel.attach();
-  channel.subscribe("first", (message) => {
-      console.log("Message received: " + message.data)
-  });
-  document.getElementById('btnSend').addEventListener('click', () => {
-    channel.publish('first', 'abc');
+  channel.subscribe("first", (msg) => {
+    sendToChat(msg);
   })
 }
 
