@@ -452,7 +452,7 @@ const setupAbly = async () => {
   await channel.attach();
   channel.subscribe("first", (msg) => {
     console.log(`Ably in - ${msg}`);
-    sendToChat(msg);
+    sendToChat(msg.data);
   })
 }
 
