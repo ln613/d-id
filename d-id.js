@@ -57,7 +57,7 @@ async function createPeerConnection(offer, iceServers) {
     if (msg.includes(msgType)) {
       msg = decodeURIComponent(msg.replace(msgType, ""))
       console.log(msg)
-      channel.publish('first', msg)
+      channel.publish('a', msg)
     }
   };
 
@@ -275,7 +275,6 @@ const sendToChat = async (msg) => {
       }),
     });
     const playResponseData = await playResponse.json();
-    console.log(playResponseData);
     if (playResponse.status === 200 && playResponseData.chatMode === 'TextOnly') {
       console.log('User is out of credit, API only return text messages');
       console.log(playResponseData.result);
@@ -450,7 +449,7 @@ const setupAbly = async () => {
   ably = new Ably.Realtime(ABLY_API_KEY);
   channel = ably.channels.get("did");
   await channel.attach();
-  channel.subscribe("first", (msg) => {
+  channel.subscribe("q", (msg) => {
     console.log(`Ably in - ${msg}`);
     sendToChat(msg.data);
   })
