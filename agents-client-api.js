@@ -449,19 +449,10 @@ async function agentsAPIworkflow(isNewAgent) {
 }
 
 const createAgent = async () => {
-  try{
     const agentsIds = {} = await agentsAPIworkflow(false)
     console.log(agentsIds)
     agentId = agentsIds.agentId
     chatId = agentsIds.chatId
-
-    return
-  }
-  catch(err){
-    agentIdLabel.innerHTML = `<span style='color:red'>Failed</span>`
-    chatIdLabel.innerHTML = `<span style='color:red'>Failed</span>`
-    throw new Error(err)
-  }
 }
 
 
