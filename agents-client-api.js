@@ -471,5 +471,6 @@ chatId = "cht_EgYOoYPqt4Ovja92RJXQ7"
 
 window.onload = () => {
   console.log('load');
+  document.getElementById('session').addEventListener('click', () => createAgent());
   connect();
 }
