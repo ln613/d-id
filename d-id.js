@@ -275,6 +275,7 @@ const sendToChat = async (msg) => {
       }),
     });
     const playResponseData = await playResponse.json();
+    console.log(playResponseData);
     if (playResponse.status === 200 && playResponseData.chatMode === 'TextOnly') {
       console.log('User is out of credit, API only return text messages');
       console.log(playResponseData.result);
@@ -450,6 +451,7 @@ const setupAbly = async () => {
   channel = ably.channels.get("did");
   await channel.attach();
   channel.subscribe("first", (msg) => {
+    console.log(`Ably in - ${msg}`);
     sendToChat(msg);
   })
 }
