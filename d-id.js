@@ -443,7 +443,7 @@ const createAgent = async () => {
 
 // Paste Your Created Agent and Chat IDs Here:
 agentId = "agt_JdGCtniN"
-chatId = "cht_EgYOoYPqt4Ovja92RJXQ7"
+chatId = "cht_G2msCOgoba4UQDYHIAgFX"
 
 const setupAbly = async () => {
   ably = new Ably.Realtime(ABLY_API_KEY);
