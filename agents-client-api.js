@@ -322,8 +322,6 @@ const destroy = async () => {
 
 // Agents API Workflow
 async function agentsAPIworkflow(isNewAgent) {
-  agentIdLabel.innerHTML = `<span style='color:orange'>Processing...<style='color:orange'>`
-  chatIdLabel.innerHTML = `<span style='color:orange'>Processing...<style='color:orange'>`
   axios.defaults.baseURL = `${DID_API.url}`;
   axios.defaults.headers.common['Authorization'] = `Basic ${DID_API.key}`
   axios.defaults.headers.common['content-type'] = 'application/json'
