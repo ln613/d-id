@@ -25,6 +25,7 @@ let channel;
 
 const videoElement = document.getElementById('video-element');
 videoElement.setAttribute('playsinline', '');
+videoElement.setAttribute('height', window.innerHeight);
 const textArea = document.getElementById("textArea");
 
 async function createPeerConnection(offer, iceServers) {
