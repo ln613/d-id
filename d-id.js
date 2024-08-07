@@ -18,8 +18,8 @@ let sessionClientAnswer;
 let statsIntervalId;
 let videoIsPlaying;
 let lastBytesReceived;
-let agentId;
-let chatId;
+let agentId = "agt_JdGCtniN";
+let chatId = "cht_G2msCOgoba4UQDYHIAgFX";
 let ably;
 let channel;
 
@@ -167,17 +167,9 @@ function closePC(pc = peerConnection) {
   if (!pc) return;
   console.log('stopping peer connection');
   pc.close();
-  pc.removeEventListener('icegatheringstatechange', onIceGatheringStateChange, true);
   pc.removeEventListener('icecandidate', onIceCandidate, true);
-  pc.removeEventListener('iceconnectionstatechange', onIceConnectionStateChange, true);
-  pc.removeEventListener('connectionstatechange', onConnectionStateChange, true);
-  pc.removeEventListener('signalingstatechange', onSignalingStateChange, true);
   pc.removeEventListener('track', onTrack, true);
   clearInterval(statsIntervalId);
-  iceGatheringStatusLabel.innerText = '';
-  signalingStatusLabel.innerText = '';
-  iceStatusLabel.innerText = '';
-  peerStatusLabel.innerText = '';
   console.log('stopped peer connection');
   if (pc === peerConnection) {
     peerConnection = null;
@@ -252,33 +244,35 @@ const connect = async () => {
   });
 };
 
+const sendToChat2 = (msg) => fetchWithRetries(`${DID_API.url}/agents/${agentId}/chat/${chatId}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Basic ${DID_API.key}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      "streamId": streamId,
+      "sessionId": sessionId,
+      "messages": [
+        {
+          "role": "user",
+          "content": msg,
+          "created_at": new Date().toString()
+        }
+      ]
+    }),
+  });
+
 const sendToChat = async (msg) => {
   // connectionState not supported in firefox
   if (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') {
 
     // Agents Overview - Step 3: Send a Message to a Chat session - Send a message to a Chat
-    const playResponse = await fetchWithRetries(`${DID_API.url}/agents/${agentId}/chat/${chatId}`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Basic ${DID_API.key}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "streamId": streamId,
-        "sessionId": sessionId,
-        "messages": [
-          {
-            "role": "user",
-            "content": msg,
-            "created_at": new Date().toString()
-          }
-        ]
-      }),
-    });
-    const playResponseData = await playResponse.json();
-    if (playResponse.status === 200 && playResponseData.chatMode === 'TextOnly') {
-      console.log('User is out of credit, API only return text messages');
-      console.log(playResponseData.result);
+    const r = await sendToChat2(msg);
+    if (r.status === 400) {
+      console.log('Renew Chat');
+      await createChat();
+      await sendToChat2(msg);
     }
   }
 };
@@ -425,26 +419,12 @@ async function agentsAPIworkflow(isNewAgent) {
 
 }
 
-const createAgent = async () => {
-  try{
-    const agentsIds = {} = await agentsAPIworkflow(false)
-    console.log(agentsIds)
-    agentId = agentsIds.agentId
-    chatId = agentsIds.chatId
-
-    return
-  }
-  catch(err){
-    agentIdLabel.innerHTML = `<span style='color:red'>Failed</span>`
-    chatIdLabel.innerHTML = `<span style='color:red'>Failed</span>`
-    throw new Error(err)
-  }
+const createChat = async () => {
+  const agentsIds = {} = await agentsAPIworkflow(false)
+  console.log(agentsIds)
+  agentId = agentsIds.agentId
+  chatId = agentsIds.chatId
 }
-
-
-// Paste Your Created Agent and Chat IDs Here:
-agentId = "agt_JdGCtniN"
-chatId = "cht_G2msCOgoba4UQDYHIAgFX"
 
 const setupAbly = async () => {
   ably = new Ably.Realtime(ABLY_API_KEY);
